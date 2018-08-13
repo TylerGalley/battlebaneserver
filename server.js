@@ -35,7 +35,7 @@ wss.on('connection', (ws) => { // when the socket server has a connection, this 
   ws.on('close', () => {
     console.log('Client disconnected');
     connectedUsers--
-});
+})};
 
 
 /* the code below has the server essentially ping itself.
