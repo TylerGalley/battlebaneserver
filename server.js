@@ -6,6 +6,8 @@ const SocketServer = require('ws').Server; // imports the websocket server frame
 const path = require('path'); // framework to access local files. not used right now.
 
 const PORT = process.env.PORT || 3000;
+
+var connectedUsers = 0;
 /*
 Picks the port that the server will run on.
 process.env.PORT is a runtime variable that can be set on Heroku.
@@ -21,8 +23,8 @@ const wss = new SocketServer({ server });
 
 wss.on('connection', (ws) => { // when the socket server has a connection, this function is ran. ws represents the client.
   console.log('Client connected');
-  console.log(wss.clients.size);
-  ws.send("clientcount~" + wss.clients.size);
+  connectedUsers ++;
+  ws.send("clientcount~" + connectedUsers);
   ws.on('message', function incoming(data) { // once the client sends a message, this function is ran
 	  wss.clients.forEach(function each(client) { // finds all of the connected clients, and tries to send the message to all of them
       if (client.readyState === WebSocket.OPEN) { // if the client is ready to receive messages, send them the message we just received.
@@ -30,7 +32,9 @@ wss.on('connection', (ws) => { // when the socket server has a connection, this 
       }
 	  });
   });
-  ws.on('close', () => console.log('Client disconnected')); // once the client leaves, this function is ran. all that is done right now is to log that they have disconnected.
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    connectedUsers--
 });
 
 
