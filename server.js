@@ -20,6 +20,7 @@ const wss = new SocketServer({ server });
 // creates the websocket server
 
 wss.on('connection', (ws) => { // when the socket server has a connection, this function is ran. ws represents the client.
+  ws.send(wss.clients.size);
   console.log('Client connected');
   ws.on('message', function incoming(data) { // once the client sends a message, this function is ran
 	  wss.clients.forEach(function each(client) { // finds all of the connected clients, and tries to send the message to all of them
